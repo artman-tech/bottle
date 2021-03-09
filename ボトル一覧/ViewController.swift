@@ -2,46 +2,84 @@
 //  ViewController.swift
 //  Bottle
 //
-//  Created by 有田栄乃祐 on 2020/09/28.
+//  Created by 有田栄乃祐 on 2021/3/1.
 //  Copyright © 2020 artApps. All rights reserved.
 //
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UISearchBarDelegate {
+class ViewController: UIViewController, UISearchBarDelegate {
     
     @IBOutlet var table: UITableView!
     @IBOutlet var label: UILabel!
     @IBOutlet var navLeftButton: UIBarButtonItem!
     @IBOutlet var search: UISearchBar!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    
     
     let cellIdentifier = "TableViewCell"
-    
     
     private var models: [(title: String, note: String, year: String, month: String, day: String, noteYear: String, noteMonth: String, noteDay: String, memo: String, remain: String, number: String)] = []
     
     private var searchResult: [(title: String, note: String, year: String, month: String, day: String, noteYear: String, noteMonth: String, noteDay: String, memo: String, remain: String, number: String)] = []
 
+    
+    @IBAction func selectedSegment(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            searchResult = models
+        default:
+            break
+        }
+        table.reloadData()
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //検索結果配列にデータをコピーする
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.selectedSegmentTintColor = .lightGray
+        
         searchResult = models
         self.title = "ボトル一覧"
-        //何も入力されなくてもReturnキーを押せるようにする。
         search.enablesReturnKeyAutomatically = false
+        search.resignFirstResponder()
+        search.placeholder = "ボトル名またはお客様氏名を入力してください"
+        
+        let searchBartextField = search.value(forKey: "searchField") as? UITextField
+        searchBartextField?.textColor = .white
+        searchBartextField?.font = searchBartextField?.font?.withSize(16)
+        
+        // 特定済みのUITextFieldからPlaceholderを特定する
+        let searchBarPlaceholderLabel = searchBartextField?.value(forKey: "placeholderLabel") as? UILabel
+        // 11サイズのシステムフォントに変更する
+        searchBarPlaceholderLabel?.font = .systemFont(ofSize: 11)
+        // 自動で小さくする可変文字サイズにする場合の例
+        searchBarPlaceholderLabel?.adjustsFontSizeToFitWidth = true
+        searchBarPlaceholderLabel?.minimumScaleFactor = 0.8  // 最小サイズ
+        
         
         table.register(UINib(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
         table.delegate = self
         table.dataSource = self
         table.layer.cornerRadius = 12
         search.delegate = self
-        gradation()
-        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
+    }
+    
+
+    // キャンセルボタンが押されると呼ばれる
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        view.endEditing(true)
+        searchResult = models
+        //tableViewを再読み込みする
+        table.reloadData()
     }
     
     func searchItems(searchText: String) {
@@ -57,8 +95,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UISearchBarDelegate
         //tableViewを再読み込みする
         table.reloadData()
     }
-    
-    //  検索バーに入力があったら呼ばれる
+
+//      検索バーに入力があったら呼ばれる
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard !searchText.isEmpty else {
             searchResult = models
@@ -68,16 +106,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UISearchBarDelegate
         searchResult = models.filter({ model -> Bool in
             model.title.lowercased().contains(searchText.lowercased())
         })
-        table.reloadData()
-    }
-    
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        search.text = ""
-        view.endEditing(true)
-        searchResult = models
-        searchItems(searchText: search.text! as String)
-        //tableViewを再読み込みする
         table.reloadData()
     }
     
@@ -136,21 +164,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UISearchBarDelegate
     
     
     
-    func gradation() {
-        let topColor = UIColor(red:0, green:0, blue:0, alpha:0)
-        //グラデーションの開始色
-        let bottomColor = UIColor(red:3, green:3, blue:3, alpha:1)
-        //グラデーションの色を配列で管理
-        let gradientColors: [CGColor] = [topColor.cgColor, bottomColor.cgColor]
-        //グラデーションレイヤーを作成
-        let gradientLayer: CAGradientLayer = CAGradientLayer()
-        //グラデーションの色をレイヤーに割り当てる
-        gradientLayer.colors = gradientColors
-        //グラデーションレイヤーをスクリーンサイズにする
-        gradientLayer.frame = self.view.bounds
-        //グラデーションレイヤーをビューの一番下に配置
-        self.view.layer.insertSublayer(gradientLayer, at: 1)
-    }
     
 }
 
@@ -195,15 +208,28 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     //TableViewのcellについて
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TableViewCell
-        cell.numberLabel?.text = models[indexPath.row].number
-        cell.customerLabel?.text = models[indexPath.row].title
-        cell.remainLabel?.text = models[indexPath.row].remain
-        cell.yearKeepLabel?.text = models[indexPath.row].noteYear
-        cell.monthKeepLabel?.text = models[indexPath.row].noteMonth
-        cell.dayKeepLabel?.text = models[indexPath.row].noteDay
-        cell.backgroundColor = .white
-        cell.layer.cornerRadius = 12
-        cell.setSelected(true, animated: true)
+        
+        let segmentIndex = segmentedControl.selectedSegmentIndex
+        switch segmentIndex {
+            
+        case 0:
+            cell.numberLabel?.text = models[indexPath.row].number
+            cell.customerLabel?.text = models[indexPath.row].title
+            cell.remainLabel?.text = models[indexPath.row].remain
+            cell.yearKeepLabel?.text = models[indexPath.row].noteYear
+            cell.monthKeepLabel?.text = models[indexPath.row].noteMonth
+            cell.dayKeepLabel?.text = models[indexPath.row].noteDay
+            cell.backgroundColor = .white
+            cell.layer.cornerRadius = 12
+            cell.setSelected(true, animated: true)
+            break
+            
+        case 1:
+            break
+            
+        default:
+            return UITableViewCell()
+        }
         return cell
     }
     
