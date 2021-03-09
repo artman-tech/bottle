@@ -2,17 +2,17 @@
 //  EntryViewController.swift
 //  Bottle
 //
-//  Created by 有田栄乃祐 on 2020/09/28.
+//  Created by 有田栄乃祐 on 2021/3/8
 //  Copyright © 2020 artApps. All rights reserved.
 //
 
 import UIKit
 
+
 class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    
     @IBOutlet weak var contentView: UIView!
-    
+    @IBOutlet var scrollView: UIScrollView!
     //お客様氏名
     @IBOutlet var customerView: UIView!
     @IBOutlet var customerNameField: UITextField!
@@ -31,6 +31,7 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     @IBOutlet var keepLimitedDayField: UITextField!
     //メモ欄
     @IBOutlet var memoTextView: UITextView!
+    @IBOutlet var memoView: UIView!
     
     @IBOutlet var remainField: UITextField!
     @IBOutlet var remainFieldView: UIView!
@@ -46,7 +47,7 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     
     let picker =  UIPickerView()
     
-    let remain = ["100~75%", "75~50%", "50~25%", "25~0%", "残量なし"]
+    let remain = ["75~100%", "50~75%", "25~50%", "~25%", "残量なし"]
     
     
     public var completion: ((String, String, String, String, String, String, String, String, String, String, String) -> Void)?
@@ -57,11 +58,10 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         
         delegateDataSource()
         viewLayer()
-        gradation()
         createDatePicker()
         notificationAddObserver()
         textFieldKeyboardType()
-        
+        gradation()
         customerNameField.becomeFirstResponder()
         productNameField.becomeFirstResponder()
         
@@ -165,6 +165,22 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     
     
     @IBAction func didTapAdd() {
+        
+//        let model = models()
+//        model.title = customerNameField.text!
+//        model.note = productNameField.text!
+//        model.year = bottleUseYearField.text!
+//        model.month = bottleUseMonthField.text!
+//        model.day = bottleUseDayField.text!
+//        model.noteYear = keepLimitedYearField.text!
+//        model.noteMonth = keepLimitedMonthField.text!
+//        model.noteDay = keepLimitedDayField.text!
+//        model.memo = memoTextView.text!
+//        model.number = numberField.text!
+//        model.remain = remainField.text!
+//
+//        let realm = try! Realm()
+        
         if let text = customerNameField.text,
             let productText = productNameField.text,
             let useYearText = bottleUseYearField.text,
@@ -202,14 +218,21 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
                                        target: self,
                                        action: #selector(commitButtonTapped))
     @objc func commitButtonTapped() {
-        self.contentView.endEditing(true)
+        self.view.endEditing(true)
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.contentView.endEditing(true)
+        self.view.endEditing(true)
     }
     
     
+    func gradation() {
+        let gradientLayer = CAGradientLayer.layerForView()
+        // gradientLayerは生成されただけだとまだフレームサイズが決まってなくてx:0, y:0 ,height:0 ,width: 0 のままなのでinsertSublayerしても表示されないためフレームを決めてあげる必要がある
+        gradientLayer.frame = self.contentView.frame
+        // layerのsublayersno0番目にgradientLayerを差し込む
+        self.contentView.layer.insertSublayer(gradientLayer, at: 0)
+    }
     
 
     
@@ -227,21 +250,6 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         memoTextView.delegate = self
     }
     
-    func gradation() {
-        let topColor = UIColor(red:0, green:0, blue:0, alpha:0)
-        //グラデーションの開始色
-        let bottomColor = UIColor(red:3, green:3, blue:3, alpha:1)
-        //グラデーションの色を配列で管理
-        let gradientColors: [CGColor] = [topColor.cgColor, bottomColor.cgColor]
-        //グラデーションレイヤーを作成
-        let gradientLayer: CAGradientLayer = CAGradientLayer()
-        //グラデーションの色をレイヤーに割り当てる
-        gradientLayer.colors = gradientColors
-        //グラデーションレイヤーをスクリーンサイズにする
-        gradientLayer.frame = self.contentView.bounds
-        //グラデーションレイヤーをビューの一番下に配置
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
-    }
     
     
     func showAleet() {
@@ -296,64 +304,64 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
     func viewLayer() {
         //CustomerView
         customerView.layer.cornerRadius = 8
-        customerView.layer.shadowColor = UIColor.white.cgColor
-        customerView.layer.shadowOpacity = 0.7
+        customerView.layer.shadowColor = UIColor.darkGray.cgColor
+        customerView.layer.shadowOpacity = 1
         customerView.layer.shadowRadius = 8
         customerView.layer.shadowOffset = CGSize(width: 4, height: 4)
         customerView.layer.borderColor = UIColor.black.cgColor
         customerView.layer.borderWidth = 0.5
         //ProductView
         productView.layer.cornerRadius = 8
-        productView.layer.shadowColor = UIColor.white.cgColor
-        productView.layer.shadowOpacity = 0.5
+        productView.layer.shadowColor = UIColor.darkGray.cgColor
+        productView.layer.shadowOpacity = 1
         productView.layer.shadowRadius = 8
         productView.layer.shadowOffset = CGSize(width: 4, height: 4)
         productView.layer.borderColor = UIColor.black.cgColor
         productView.layer.borderWidth = 0.5
         //bottleUseView
         bottleUseView.layer.cornerRadius = 8
-        bottleUseView.layer.shadowColor = UIColor.white.cgColor
-        bottleUseView.layer.shadowOpacity = 0.5
+        bottleUseView.layer.shadowColor = UIColor.darkGray.cgColor
+        bottleUseView.layer.shadowOpacity = 1
         bottleUseView.layer.shadowRadius = 8
         bottleUseView.layer.shadowOffset = CGSize(width: 4, height: 4)
         bottleUseView.layer.borderColor = UIColor.black.cgColor
         bottleUseView.layer.borderWidth = 0.5
         //keepLimitedView
         keepLimitedView.layer.cornerRadius = 8
-        keepLimitedView.layer.shadowColor = UIColor.white.cgColor
-        keepLimitedView.layer.shadowOpacity = 0.5
+        keepLimitedView.layer.shadowColor = UIColor.darkGray.cgColor
+        keepLimitedView.layer.shadowOpacity = 1
         keepLimitedView.layer.shadowRadius = 8
         keepLimitedView.layer.shadowOffset = CGSize(width: 4, height: 4)
         keepLimitedView.layer.borderColor = UIColor.black.cgColor
         keepLimitedView.layer.borderWidth = 0.5
         //remainView
         remainFieldView.layer.cornerRadius = 8
-        remainFieldView.layer.shadowColor = UIColor.white.cgColor
-        remainFieldView.layer.shadowOpacity = 0.5
+        remainFieldView.layer.shadowColor = UIColor.darkGray.cgColor
+        remainFieldView.layer.shadowOpacity = 1
         remainFieldView.layer.shadowRadius = 8
         remainFieldView.layer.shadowOffset = CGSize(width: 4, height: 4)
         remainFieldView.layer.borderColor = UIColor.black.cgColor
         remainFieldView.layer.borderWidth = 0.5
         //numberFieldView
         numberFieldView.layer.cornerRadius = 8
-        numberFieldView.layer.shadowColor = UIColor.white.cgColor
-        numberFieldView.layer.shadowOpacity = 0.5
+        numberFieldView.layer.shadowColor = UIColor.darkGray.cgColor
+        numberFieldView.layer.shadowOpacity = 1
         numberFieldView.layer.shadowRadius = 8
         numberFieldView.layer.shadowOffset = CGSize(width: 4, height: 4)
         numberFieldView.layer.borderColor = UIColor.black.cgColor
         numberFieldView.layer.borderWidth = 0.5
-        //memoTextview
+        //memoTextView
         memoTextView.layer.cornerRadius = 8
-        memoTextView.layer.shadowColor = UIColor.white.cgColor
-        memoTextView.layer.shadowOpacity = 0.5
+        memoTextView.layer.shadowColor = UIColor.darkGray.cgColor
+        memoTextView.layer.shadowOpacity = 1
         memoTextView.layer.shadowRadius = 8
         memoTextView.layer.shadowOffset = CGSize(width: 4, height: 4)
         memoTextView.layer.borderColor = UIColor.black.cgColor
         memoTextView.layer.borderWidth = 0.5
-        
+        //addButton
         addButton.layer.cornerRadius = 8
-        addButton.layer.shadowColor = UIColor.white.cgColor
-        addButton.layer.shadowOpacity = 0.5
+        addButton.layer.shadowColor = UIColor.darkGray.cgColor
+        addButton.layer.shadowOpacity = 1
         addButton.layer.shadowRadius = 8
         addButton.layer.shadowOffset = CGSize(width: 4, height: 4)
         addButton.layer.borderColor = UIColor.black.cgColor
