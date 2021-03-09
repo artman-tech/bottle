@@ -56,7 +56,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     let picker =  UIPickerView()
     
-    let noteRemain = ["100~75%", "75~50%", "50~25%", "25~0%", "残量なし"]
+    let noteRemain = ["75~100%", "50~75%", "25~50%", "~25%", "残量なし"]
     
     public var completion: ((String, String, String, String, String, String, String, String, String, String, String) -> Void)?
     
@@ -287,7 +287,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     func ViewLayer() {
         //noteCustomerView
         noteCustomerView.layer.cornerRadius = 8
-        noteCustomerView.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        noteCustomerView.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         noteCustomerView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteCustomerView.layer.shadowRadius = 8 //影のぼかし
         noteCustomerView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -295,7 +295,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteCustomerView.layer.borderWidth = 0.5
         //noteProductView
         noteProductView.layer.cornerRadius = 8
-        noteProductView.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        noteProductView.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         noteProductView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteProductView.layer.shadowRadius = 8 //影のぼかし
         noteProductView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -303,7 +303,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteProductView.layer.borderWidth = 0.5
         //noteBottleUseView
         noteBottleUseView.layer.cornerRadius = 8
-        noteBottleUseView.layer.shadowColor = UIColor.white.cgColor //影の色をbottleUseView
+        noteBottleUseView.layer.shadowColor = UIColor.lightGray.cgColor //影の色をbottleUseView
         noteBottleUseView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteBottleUseView.layer.shadowRadius = 8 //影のぼかし
         noteBottleUseView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -311,7 +311,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteBottleUseView.layer.borderWidth = 0.5
         //noteBottleKeepView
         noteBottleKeepView.layer.cornerRadius = 8
-        noteBottleKeepView.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        noteBottleKeepView.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         noteBottleKeepView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteBottleKeepView.layer.shadowRadius = 8 //影のぼかし
         noteBottleKeepView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -319,7 +319,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteBottleKeepView.layer.borderWidth = 0.5
         //noteRemainView
         noteRemainFieldView.layer.cornerRadius = 8
-        noteRemainFieldView.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        noteRemainFieldView.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         noteRemainFieldView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteRemainFieldView.layer.shadowRadius = 8 //影のぼかし
         noteRemainFieldView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -327,7 +327,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteRemainFieldView.layer.borderWidth = 0.5
         //noteMemoTextView
         noteMemoTextView.layer.cornerRadius = 8
-        noteMemoTextView.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        noteMemoTextView.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         noteMemoTextView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteMemoTextView.layer.shadowRadius = 8 //影のぼかし
         noteMemoTextView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -336,7 +336,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         //noetNumberFieldView
         noteNumberFieldView.layer.cornerRadius = 8
-        noteNumberFieldView.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        noteNumberFieldView.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         noteNumberFieldView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteNumberFieldView.layer.shadowRadius = 8 //影のぼかし
         noteNumberFieldView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -344,7 +344,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteNumberFieldView.layer.borderWidth = 0.5
         //noteMemoTextView
         noteMemoTextView.layer.cornerRadius = 8
-        noteMemoTextView.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        noteMemoTextView.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         noteMemoTextView.layer.shadowOpacity = 0.5 //影の色の透明度
         noteMemoTextView.layer.shadowRadius = 8 //影のぼかし
         noteMemoTextView.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -352,7 +352,7 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         noteMemoTextView.layer.borderWidth = 0.5
         
         updateButton.layer.cornerRadius = 8
-        updateButton.layer.shadowColor = UIColor.white.cgColor //影の色を決める
+        updateButton.layer.shadowColor = UIColor.lightGray.cgColor //影の色を決める
         updateButton.layer.shadowOpacity = 0.5 //影の色の透明度
         updateButton.layer.shadowRadius = 8 //影のぼかし
         updateButton.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -377,19 +377,11 @@ class NoteViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     
     
     func gradation() {
-        let topColor = UIColor(red:0, green:0, blue:0, alpha:0)
-        //グラデーションの開始色
-        let bottomColor = UIColor(red:3, green:3, blue:3, alpha:1)
-        //グラデーションの色を配列で管理
-        let gradientColors: [CGColor] = [topColor.cgColor, bottomColor.cgColor]
-        //グラデーションレイヤーを作成
-        let gradientLayer: CAGradientLayer = CAGradientLayer()
-        //グラデーションの色をレイヤーに割り当てる
-        gradientLayer.colors = gradientColors
-        //グラデーションレイヤーをスクリーンサイズにする
-        gradientLayer.frame = self.contentView.bounds
-        //グラデーションレイヤーをビューの一番下に配置
-        self.view.layer.insertSublayer(gradientLayer, at: 0)
+        let gradientLayer = CAGradientLayer.layerForView()
+        // gradientLayerは生成されただけだとまだフレームサイズが決まってなくてx:0, y:0 ,height:0 ,width: 0 のままなのでinsertSublayerしても表示されないためフレームを決めてあげる必要がある
+        gradientLayer.frame = self.contentView.frame
+        // layerのsublayersno0番目にgradientLayerを差し込む
+        self.contentView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
 }
